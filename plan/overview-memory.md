@@ -10,10 +10,10 @@ We are prototyping the future of "agent-personalized software": a shared set of 
 
 | Phase | Agent | Plan File | Log File | Status |
 |---|---|---|---|---|
-| 1 | PM-Agent | `plan/pm-agent/plan.md` | `plan/pm-agent/log.md` | Not started |
-| 2 | SWE-Agent | `plan/swe-agent/plan.md` | `plan/swe-agent/log.md` | Blocked on Phase 1 |
-| 3 | Design-Agent | `plan/design-agent/plan.md` | `plan/design-agent/log.md` | Blocked on Phase 1 & 2 |
-| 4 | QA-Agent | `plan/qa-agent/plan.md` | `plan/qa-agent/log.md` | Blocked on Phase 2 & 3 |
+| 1 | PM-Agent | `plan/pm-agent/plan.md` | `plan/pm-agent/log.md` | Complete |
+| 2 | SWE-Agent | `plan/swe-agent/plan.md` | `plan/swe-agent/log.md` | Complete |
+| 3 | Design-Agent | `plan/design-agent/plan.md` | `plan/design-agent/log.md` | Complete |
+| 4 | QA-Agent | `plan/qa-agent/plan.md` | `plan/qa-agent/log.md` | Complete |
 
 ## Operating Protocol (all agents)
 
@@ -28,10 +28,13 @@ We are prototyping the future of "agent-personalized software": a shared set of 
 
 <!-- Newest entries at the top. Format: `- YYYY-MM-DDTHH:MM:SSZ | Agent | Update` -->
 
+- 2026-09-20T23:16:52Z | QA-Agent | Prototype reviewed against scope: shared mock data, Fluent UI design cohesion, and persona coverage documented for validation handoff.
+- 2026-09-20T23:16:51Z | Design-Agent | Delivered Fluent UI v9 finance prototype with three persona-driven experiences sharing one design language and dataset.
+- 2026-09-20T23:16:50Z | SWE-Agent | Added typed finance primitives, mock API module, and local Vite app setup documentation.
+- 2026-09-20T22:27:30Z | PM-Agent | Completed initial repository review and confirmed repo starting state.
 - 2026-09-20T00:00:00Z | PM-Agent (bootstrap) | Plan folder, per-agent plans, logs, and this overview file created. Ready for PM-Agent to begin Phase 1 (research & scoping).
 
 ## Known Risks / Open Questions
 
-- How much of the "agent-modifiable middleware" concept should be prototyped vs. simulated with mock data in this early phase? (PM-Agent to scope.)
-- Need a lightweight design system/token set before Design-Agent starts building UI variants, to guarantee cohesion across radically different layouts.
-- QA-Agent should not begin full review until SWE-Agent's mock API contracts are stable, to avoid re-reviewing churn.
+- The prototype intentionally uses a single in-memory API call; future iterations may split data fetching by feature while preserving the shared contract.
+- If higher-fidelity planning or trading workflows are needed, the dataset will need additional time-series and calendar primitives.
