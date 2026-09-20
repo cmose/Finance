@@ -55,6 +55,7 @@ export function BudgetPlannerView({ data }: { data: FinanceDataset }) {
   const styles = useStyles()
   const totalBudget = data.budgets.reduce((sum, budget) => sum + budget.limit, 0)
   const totalSpent = data.budgets.reduce((sum, budget) => sum + budget.spent, 0)
+  const budgetUtilization = totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0
   const upcomingBills = data.bills.filter((bill) => bill.status !== 'paid')
   const activeInsight = data.insights.find((insight) => insight.persona.includes('planner'))
 
@@ -67,7 +68,7 @@ export function BudgetPlannerView({ data }: { data: FinanceDataset }) {
         actions={<Badge appearance="filled" color="informative" icon={<CalendarLtrRegular />}>Month-end mode</Badge>}
       />
       <div className={styles.metrics}>
-        <MetricCard label="Budget utilization" value={`${Math.round((totalSpent / totalBudget) * 100)}%`} detail="Aggregated across the active operating envelopes." badge="On plan" tone="informative" />
+        <MetricCard label="Budget utilization" value={`${budgetUtilization}%`} detail="Aggregated across the active operating envelopes." badge="On plan" tone="informative" />
         <MetricCard label="Bills due this week" value={String(upcomingBills.length)} detail="Scheduled and risk-ranked from the same shared bills primitive." badge="2 require review" tone="important" />
         <MetricCard label="Available runway" value="45 days" detail="Liquidity estimate based on reserves and planned monthly outflow." badge="Healthy" tone="brand" />
       </div>
@@ -89,7 +90,7 @@ export function BudgetPlannerView({ data }: { data: FinanceDataset }) {
           />
           <div className={styles.budgets}>
             {data.budgets.map((budget) => {
-              const progress = budget.spent / budget.limit
+              const progress = budget.limit > 0 ? Math.min(budget.spent / budget.limit, 1) : 0
               const remaining = budget.limit - budget.spent
               return (
                 <Card key={budget.id} className={styles.budgetCard}>

@@ -48,6 +48,9 @@ export function TraderDashboardView({ data }: { data: FinanceDataset }) {
     (sum, position) => sum + (position.marketPrice - position.averageCost) * position.quantity,
     0,
   )
+  const availableLiquidity = data.accounts
+    .filter((account) => account.type === 'checking' || account.type === 'savings')
+    .reduce((sum, account) => sum + account.balance, 0)
   const activeInsight = data.insights.find((insight) => insight.persona.includes('trader'))
 
   return (
@@ -61,7 +64,7 @@ export function TraderDashboardView({ data }: { data: FinanceDataset }) {
       <div className={styles.metrics}>
         <MetricCard label="Portfolio value" value={currency.format(portfolioValue)} detail="Across software, AI, and fixed-income positions." badge="+3 holdings" tone="brand" />
         <MetricCard label="Unrealized gain" value={currency.format(dailyPnl)} detail="Today's performance against weighted average cost." badge="Session high" tone="informative" />
-        <MetricCard label="Available liquidity" value={currency.format(data.accounts[1].balance + data.accounts[2].balance)} detail="Cash accessible for rebalancing or bill coverage." badge="T+0 ready" tone="subtle" />
+        <MetricCard label="Available liquidity" value={currency.format(availableLiquidity)} detail="Cash accessible for rebalancing or bill coverage." badge="T+0 ready" tone="subtle" />
       </div>
       <div className={styles.split}>
         <div className={styles.grid}>
