@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import type { ReactElement } from 'react'
 import {
   Badge,
   Body1,
@@ -11,7 +12,7 @@ import {
 import {
   ArrowTrendingLinesRegular,
   CalendarLtrRegular,
-  ChecklistRegular,
+  CheckmarkCircleRegular,
 } from '@fluentui/react-icons'
 import { AppShell } from './components/AppShell'
 import { SectionHeader } from './components/SectionHeader'
@@ -26,7 +27,7 @@ const personaOptions: Array<{
   id: PersonaId
   label: string
   subtitle: string
-  icon: JSX.Element
+  icon: ReactElement
 }> = [
   {
     id: 'trader',
@@ -44,7 +45,7 @@ const personaOptions: Array<{
     id: 'focus',
     label: 'Bills action center',
     subtitle: 'Task-oriented view for due items and approvals',
-    icon: <ChecklistRegular />,
+    icon: <CheckmarkCircleRegular />,
   },
 ]
 

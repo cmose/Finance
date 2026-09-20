@@ -54,7 +54,6 @@ const useStyles = makeStyles({
   actionButton: {
     backgroundColor: 'rgba(255,255,255,0.12)',
     color: '#ffffff',
-    borderColor: 'rgba(255,255,255,0.2)',
   },
   actionSecondary: {
     backgroundColor: '#ffffff',
