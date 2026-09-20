@@ -54,6 +54,9 @@ const dueStatuses = new Set(['overdue', 'due-soon'])
 export function BillsFocusView({ data }: { data: FinanceDataset }) {
   const styles = useStyles()
   const urgentBills = data.bills.filter((bill) => dueStatuses.has(bill.status))
+  const recentTransactions = [...data.transactions]
+    .sort((left, right) => new Date(right.postedOn).getTime() - new Date(left.postedOn).getTime())
+    .slice(0, 5)
   const activeInsight = data.insights.find((insight) => insight.persona.includes('focus'))
 
   return (
@@ -89,7 +92,7 @@ export function BillsFocusView({ data }: { data: FinanceDataset }) {
                   <Body1 className={styles.muted}>Due {bill.dueDate} · {bill.category} · {bill.autopay ? 'Autopay' : 'Manual'}</Body1>
                 </div>
                 <div>
-                  <Checkbox label="Ready to route" />
+                  <Checkbox label={`Ready to route ${bill.name}`} />
                 </div>
               </div>
             ))}
@@ -102,7 +105,7 @@ export function BillsFocusView({ data }: { data: FinanceDataset }) {
             title="Recent ledger context"
             description="A supporting transaction view keeps the operator close to the latest money movement without leaving the streamlined layout."
           />
-          <TransactionsTable transactions={data.transactions.slice(0, 5)} />
+          <TransactionsTable transactions={recentTransactions} />
           <Badge appearance="filled" color="subtle">Shared mock API · no persona-specific backend fork</Badge>
         </div>
       </div>

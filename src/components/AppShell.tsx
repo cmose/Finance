@@ -87,7 +87,7 @@ export function AppShell({ children }: PropsWithChildren) {
         </div>
       </section>
       <section>
-        <Subtitle2>Finance Command Center</Subtitle2>
+        <Subtitle2 as="h2">Finance Command Center</Subtitle2>
         {children}
       </section>
     </div>

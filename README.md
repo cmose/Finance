@@ -2,7 +2,7 @@
 
 A polished Fluent UI React prototype that demonstrates how a single shared finance dataset can power multiple persona-specific experiences:
 
-- **Market pulse dashboard** for an active investor or day-trader
+- **Market pulse dashboard** for an active investor or day trader
 - **Cash-flow planner** for finance leads managing budgets and upcoming obligations
 - **Bills action center** for operators focused on due items and approvals
 

@@ -57,6 +57,24 @@ export function BudgetPlannerView({ data }: { data: FinanceDataset }) {
   const totalSpent = data.budgets.reduce((sum, budget) => sum + budget.spent, 0)
   const budgetUtilization = totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0
   const upcomingBills = data.bills.filter((bill) => bill.status !== 'paid')
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const nextWeek = new Date(today)
+  nextWeek.setDate(today.getDate() + 7)
+  const billsDueThisWeek = upcomingBills.filter((bill) => {
+    const dueDate = new Date(`${bill.dueDate}T00:00:00`)
+    return dueDate <= nextWeek
+  })
+  const reviewCount = upcomingBills.filter(
+    (bill) => bill.status === 'due-soon' || bill.status === 'overdue',
+  ).length
+  const liquidBalance = data.accounts
+    .filter((account) => account.type === 'checking' || account.type === 'savings')
+    .reduce((sum, account) => sum + account.balance, 0)
+  const projectedMonthlyOutflow =
+    totalSpent + upcomingBills.reduce((sum, bill) => sum + bill.amount, 0)
+  const runwayDays =
+    projectedMonthlyOutflow > 0 ? Math.max(Math.floor(liquidBalance / (projectedMonthlyOutflow / 30)), 0) : 0
   const activeInsight = data.insights.find((insight) => insight.persona.includes('planner'))
 
   return (
@@ -69,8 +87,8 @@ export function BudgetPlannerView({ data }: { data: FinanceDataset }) {
       />
       <div className={styles.metrics}>
         <MetricCard label="Budget utilization" value={`${budgetUtilization}%`} detail="Aggregated across the active operating envelopes." badge="On plan" tone="informative" />
-        <MetricCard label="Bills due this week" value={String(upcomingBills.length)} detail="Scheduled and risk-ranked from the same shared bills primitive." badge="2 require review" tone="important" />
-        <MetricCard label="Available runway" value="45 days" detail="Liquidity estimate based on reserves and planned monthly outflow." badge="Healthy" tone="brand" />
+        <MetricCard label="Bills due this week" value={String(billsDueThisWeek.length)} detail="Scheduled and risk-ranked from the same shared bills primitive." badge={`${reviewCount} require review`} tone="important" />
+        <MetricCard label="Available runway" value={`${runwayDays} days`} detail="Liquidity estimate derived from liquid accounts and projected monthly outflow." badge="Data backed" tone="brand" />
       </div>
       <div className={styles.split}>
         <div className={styles.grid}>
@@ -91,7 +109,8 @@ export function BudgetPlannerView({ data }: { data: FinanceDataset }) {
           <div className={styles.budgets}>
             {data.budgets.map((budget) => {
               const progress = budget.limit > 0 ? Math.min(budget.spent / budget.limit, 1) : 0
-              const remaining = budget.limit - budget.spent
+              const remaining = Math.max(budget.limit - budget.spent, 0)
+              const overage = Math.max(budget.spent - budget.limit, 0)
               return (
                 <Card key={budget.id} className={styles.budgetCard}>
                   <div className={styles.row}>
@@ -105,7 +124,11 @@ export function BudgetPlannerView({ data }: { data: FinanceDataset }) {
                     <Body1>{currency.format(budget.spent)} spent</Body1>
                     <Body1>{currency.format(budget.limit)} cap</Body1>
                   </div>
-                  <Body1 className={styles.text}>{currency.format(remaining)} remaining before the next review checkpoint.</Body1>
+                  <Body1 className={styles.text}>
+                    {overage > 0
+                      ? `${currency.format(overage)} over plan and ready for review.`
+                      : `${currency.format(remaining)} remaining before the next review checkpoint.`}
+                  </Body1>
                 </Card>
               )
             })}

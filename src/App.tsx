@@ -122,14 +122,19 @@ function App() {
               </Body1>
             </Card>
             {isLoading ? (
-              <Card className="empty-state">
+              <Card className="empty-state" role="status" aria-live="polite">
                 <Spinner label="Loading finance prototype" size="large" />
                 <Body1>Booting the shared mock API and aligning personas.</Body1>
               </Card>
             ) : error ? (
-              <Card className="empty-state">
+              <Card className="empty-state" role="alert" aria-live="assertive">
                 <Title3>Dataset unavailable</Title3>
                 <Body1>{error}</Body1>
+              </Card>
+            ) : !data ? (
+              <Card className="empty-state" role="status" aria-live="polite">
+                <Title3>No finance data available</Title3>
+                <Body1>The shared finance dataset is empty. Add mock primitives to populate the persona views.</Body1>
               </Card>
             ) : (
               content
